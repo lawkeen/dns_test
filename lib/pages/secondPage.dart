@@ -1,11 +1,27 @@
 import 'dart:ui';
 
 import 'package:dns_test/bloc/secondPageBloc.dart';
+import 'package:dns_test/model/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SecondPage extends StatelessWidget {
-  final bloc = SecondPageBloc();
+class SecondPage extends StatefulWidget {
+  final User user;
+
+  SecondPage(this.user);
+
+  @override
+  SecondPageState createState() => SecondPageState();
+}
+
+class SecondPageState extends State<SecondPage> {
+  SecondPageBloc bloc;
+
+  @override
+  initState() {
+    bloc = SecondPageBloc(widget.user);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +53,7 @@ class SecondPage extends StatelessWidget {
           Spacer(),
           RaisedButton(
             onPressed: () async {
-              var res = await bloc.onTap();
+              await bloc.onTap();
             },
             color: Color(0xffED8E00),
             textColor: Colors.white,
@@ -52,7 +68,7 @@ class SecondPage extends StatelessWidget {
             elevation: 3,
           ),
           SizedBox(
-            height: 50,
+            height: 45,
           ),
         ],
       ),

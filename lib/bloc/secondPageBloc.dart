@@ -3,12 +3,13 @@ import 'package:dns_test/data/repository.dart';
 import 'package:dns_test/model/userModel.dart';
 
 class SecondPageBloc {
-  final user = User();
+  SecondPageBloc(this.user);
+
+  final User user;
+  final api = Api();
+  final rep = Repository();
 
   Future<String> onTap() async {
-    final user = User();
-    final api = Api();
-    final rep = Repository();
     if (user.firstName == null) {
       return ('Нет имени');
     }

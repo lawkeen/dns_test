@@ -86,7 +86,8 @@ class Api {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> summaryTestOutPut = jsonDecode(response.body);
-    } else
-      return 'Warning!';
+      return 'true';
+    }
+    return null;
   }
 }

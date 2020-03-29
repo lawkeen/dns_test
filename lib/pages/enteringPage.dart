@@ -16,7 +16,7 @@ class EnteringPageState extends State<EnteringPage> {
   Future _goToNextScreen(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute<Map<dynamic, dynamic>>(
         builder: (BuildContext context) {
-      return SecondPage();
+      return SecondPage(bloc.user);
     }));
   }
 
@@ -66,7 +66,7 @@ class EnteringPageState extends State<EnteringPage> {
           Spacer(),
           RaisedButton(
             onPressed: () async {
-              var res = await bloc.onTap();
+              await bloc.onTap();
               _goToNextScreen(context);
             },
             color: Color(0xffED8E00),
@@ -82,7 +82,7 @@ class EnteringPageState extends State<EnteringPage> {
             elevation: 3,
           ),
           SizedBox(
-            height: 50,
+            height: 40,
           ),
         ],
       ),
