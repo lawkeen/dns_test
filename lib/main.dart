@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/EnteringPage.dart';
+
+import 'pages/enteringPage.dart';
 
 void main() async => runApp(MyApp());
 
@@ -9,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:EnteringPage(),
+      home: EnteringPage(),
     );
   }
 }

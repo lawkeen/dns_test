@@ -1,55 +1,49 @@
 import 'dart:ui';
-import 'package:dns_test/data/api.dart';
+
+import 'package:dns_test/bloc/secondPageBloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SecondScreen extends StatelessWidget {
-  static final gitFieldController = new TextEditingController();
-  static final summaryFieldController = new TextEditingController();
+class SecondPage extends StatelessWidget {
+  final bloc = SecondPageBloc();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text('Отправка данных'),
+      appBar: AppBar(
+        title: Text('Отправка данных'),
         centerTitle: false,
         backgroundColor: Color(0xffED8E00),
         elevation: 5,
       ),
-      body: new Column(
+      body: Column(
         children: <Widget>[
-          new ListTile(
-            title: new TextField(
-              decoration: new InputDecoration(
+          ListTile(
+            title: TextField(
+              onChanged: (value) => bloc.user.githubProfileUrl = value,
+              decoration: InputDecoration(
                 hintText: 'ссылка на github',
               ),
-              controller: gitFieldController,
             ),
           ),
-          new ListTile(
-            title: new TextField(
-              decoration: new InputDecoration(
+          ListTile(
+            title: TextField(
+              onChanged: (value) => bloc.user.summary = value,
+              decoration: InputDecoration(
                 hintText: 'ссылка на резюме',
               ),
-              controller: summaryFieldController,
             ),
           ),
           Spacer(),
-          new RaisedButton(
-            onPressed: () {
-              Navigator.pop(context, {
-                'github': gitFieldController.text,
-                'summary': summaryFieldController.text,
-              });
-              Api.getTestSummary();
-              print('Vse ok!');
+          RaisedButton(
+            onPressed: () async {
+              var res = await bloc.onTap();
             },
             color: Color(0xffED8E00),
             textColor: Colors.white,
-            child: new Text(
+            child: Text(
               'ЗАРЕГИСТРИРОВАТЬСЯ',
-              style: new TextStyle(
-                fontFamily: 'Roboto',
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
                 fontStyle: FontStyle.normal,
@@ -57,7 +51,7 @@ class SecondScreen extends StatelessWidget {
             ),
             elevation: 3,
           ),
-          new SizedBox(
+          SizedBox(
             height: 50,
           ),
         ],
