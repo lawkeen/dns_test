@@ -1,13 +1,24 @@
-import 'package:dns_test/data/api.dart';
 import 'package:dns_test/data/repository.dart';
 import 'package:dns_test/model/userModel.dart';
+import 'package:rxdart/rxdart.dart';
+
+enum LoadingState { loading, loaded, init }
 
 class SecondPageBloc {
-  SecondPageBloc(this.user);
+  final loadingSubject = BehaviorSubject<LoadingState>();
+
+  _init() {
+    loadingSubject.sink.add(LoadingState.init);
+  }
+
+  SecondPageBloc(this.user) {
+    _init();
+  }
 
   final User user;
-  final api = Api();
-  final rep = Repository();
+  final _rep = Repository();
+
+  get watchLoading => loadingSubject.stream;
 
   Future<String> onTap() async {
     if (user.firstName == null) {
@@ -28,6 +39,13 @@ class SecondPageBloc {
     if (user.summary == null) {
       return ('Нет резюме');
     }
-    return await rep.register(user);
+    loadingSubject.sink.add(LoadingState.loading);
+    var res = await _rep.register(user);
+    loadingSubject.sink.add(LoadingState.loaded);
+    return res;
+  }
+
+  dispose() {
+    loadingSubject.close();
   }
 }

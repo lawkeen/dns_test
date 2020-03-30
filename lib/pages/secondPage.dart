@@ -2,24 +2,26 @@ import 'dart:ui';
 
 import 'package:dns_test/bloc/secondPageBloc.dart';
 import 'package:dns_test/model/userModel.dart';
+import 'package:dns_test/res/appColors.dart';
+import 'package:dns_test/res/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SecondPage extends StatefulWidget {
-  final User user;
+  final User _user;
 
-  SecondPage(this.user);
+  SecondPage(this._user);
 
   @override
   SecondPageState createState() => SecondPageState();
 }
 
 class SecondPageState extends State<SecondPage> {
-  SecondPageBloc bloc;
+  SecondPageBloc _bloc;
 
   @override
   initState() {
-    bloc = SecondPageBloc(widget.user);
+    _bloc = SecondPageBloc(widget._user);
     super.initState();
   }
 
@@ -27,44 +29,49 @@ class SecondPageState extends State<SecondPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Отправка данных'),
+        title: Text(Strings.title2),
         centerTitle: false,
-        backgroundColor: Color(0xffED8E00),
+        backgroundColor: AppColors.orange,
         elevation: 5,
       ),
       body: Column(
         children: <Widget>[
           ListTile(
             title: TextField(
-              onChanged: (value) => bloc.user.githubProfileUrl = value,
+              onChanged: (value) => _bloc.user.githubProfileUrl = value,
               decoration: InputDecoration(
-                hintText: 'ссылка на github',
+                hintText: Strings.gitHub,
               ),
             ),
           ),
           ListTile(
             title: TextField(
-              onChanged: (value) => bloc.user.summary = value,
+              onChanged: (value) => _bloc.user.summary = value,
               decoration: InputDecoration(
-                hintText: 'ссылка на резюме',
+                hintText: Strings.summary,
               ),
             ),
           ),
           Spacer(),
           RaisedButton(
             onPressed: () async {
-              await bloc.onTap();
+              await _bloc.onTap();
             },
-            color: Color(0xffED8E00),
+            color: AppColors.orange,
             textColor: Colors.white,
-            child: Text(
-              'ЗАРЕГИСТРИРОВАТЬСЯ',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                fontStyle: FontStyle.normal,
-              ),
-            ),
+            child: StreamBuilder(
+                stream: _bloc.watchLoading,
+                builder: (context, snapshot) =>
+                    (snapshot.hasData && snapshot.data != LoadingState.loading)
+                        ? Text(
+                            Strings.button2,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          )
+                        : CircularProgressIndicator()),
             elevation: 3,
           ),
           SizedBox(

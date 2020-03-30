@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:dns_test/bloc/enteringPageBloc.dart';
+import 'package:dns_test/res/appColors.dart';
 import 'package:flutter/material.dart';
 
+import '../res/strings.dart';
 import 'secondPage.dart';
 
 class EnteringPage extends StatefulWidget {
@@ -11,12 +13,12 @@ class EnteringPage extends StatefulWidget {
 }
 
 class EnteringPageState extends State<EnteringPage> {
-  var bloc = EnteringPageBloc();
+  var _bloc = EnteringPageBloc();
 
   Future _goToNextScreen(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute<Map<dynamic, dynamic>>(
         builder: (BuildContext context) {
-      return SecondPage(bloc.user);
+      return SecondPage(_bloc.user);
     }));
   }
 
@@ -24,60 +26,66 @@ class EnteringPageState extends State<EnteringPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ввод данных'),
+        title: Text(Strings.title1),
         centerTitle: false,
-        backgroundColor: Color(0xffED8E00),
+        backgroundColor: AppColors.orange,
         elevation: 5,
       ),
       body: Column(
         children: <Widget>[
           ListTile(
             title: TextField(
-              onChanged: (value) => bloc.user.firstName = value,
+              onChanged: (value) => _bloc.user.firstName = value,
               decoration: InputDecoration(
-                hintText: 'Имя',
+                hintText: Strings.firstName,
               ),
             ),
           ),
           ListTile(
             title: TextField(
-              onChanged: (value) => bloc.user.lastName = value,
+              onChanged: (value) => _bloc.user.lastName = value,
               decoration: InputDecoration(
-                hintText: 'Фамилия',
+                hintText: Strings.lastName,
               ),
             ),
           ),
           ListTile(
             title: TextField(
-              onChanged: (value) => bloc.user.email = value,
+              onChanged: (value) => _bloc.user.email = value,
               decoration: InputDecoration(
-                hintText: 'e-mail',
+                hintText: Strings.email,
               ),
             ),
           ),
           ListTile(
             title: TextField(
-              onChanged: (value) => bloc.user.phoneNumber = value,
+              onChanged: (value) => _bloc.user.phoneNumber = value,
               decoration: InputDecoration(
-                hintText: 'Телефон',
+                hintText: Strings.phoneNumber,
               ),
             ),
           ),
           Spacer(),
           RaisedButton(
             onPressed: () async {
-              await bloc.onTap();
+              await _bloc.onTap();
               _goToNextScreen(context);
             },
-            color: Color(0xffED8E00),
+            color: AppColors.orange,
             textColor: Colors.white,
-            child: Text(
-              'ПОЛУЧИТЬ КЛЮЧ',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                fontStyle: FontStyle.normal,
-              ),
+            child: StreamBuilder<LoadingState>(
+              stream: _bloc.watchLoading,
+              builder: (context, snapshot) =>
+              (snapshot.hasData && snapshot.data != LoadingState.loading)
+                  ? Text(
+                Strings.button1,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  fontStyle: FontStyle.normal,
+                ),
+              )
+                  : CircularProgressIndicator(),
             ),
             elevation: 3,
           ),
